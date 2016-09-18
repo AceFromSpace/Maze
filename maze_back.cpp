@@ -51,7 +51,7 @@ void maze_back::show_queue()
 
 int maze_back::make_maze(int x, int y)
 {
-
+	history.push_back(cv::Point(x, y));
 
 	int p = rand() % 4;
 
@@ -109,6 +109,11 @@ int ** maze_back::return_tab()
 vector<cv::Point> maze_back::return_queue()
 {
 	return queue;
+}
+
+vector<cv::Point> maze_back::return_history()
+{
+	return history;
 }
 
 int maze_back::return_size()

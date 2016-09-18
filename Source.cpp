@@ -1,4 +1,4 @@
-#include <opencv2/highgui/highgui.hpp>            //Do³¹czenie potrzebnych nag³ówków 
+#include <opencv2/highgui/highgui.hpp>            
 #include "opencv2/imgproc/imgproc.hpp" 
 #include <string> 
 #include <iostream> 
@@ -6,13 +6,13 @@
 #include "maze_front.h"
 #include "maze_solver.h"
 
-using namespace cv;                        //Przestrzeñ nazw OpenCV 
+using namespace cv;                       
 using namespace std;
 
 int main()
 {
 
-	cout << "Set size of maze " << endl;
+	cout << "Set size of maze (max. 84)" << endl;
 	int number;
 	cin >> number;
 	maze_back back(number);
@@ -24,7 +24,7 @@ int main()
 	back.show_the_table(); 
 
 	int cell_size;
-	maze_front front(back.return_tab(),back.return_queue(), back.return_size(),0);
+	maze_front front(back.return_tab(),back.return_queue(), back.return_size(), back.return_history(),0);
 	front.make_maze();
 	maze_solver solver(front.return_board(),front.return_cell_size());
 	solver.solving();

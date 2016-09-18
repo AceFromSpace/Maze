@@ -54,7 +54,7 @@ void maze_solver::solving()
 	imshow("path_off", path_off);
 
 	
-	primary = primary^path_off;
+	primary = (primary^path_off);
 	imshow("at the end", primary);
 	cout<< contours.size();
 
