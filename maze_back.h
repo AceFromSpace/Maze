@@ -20,14 +20,14 @@ public:
 	int make_maze(int x, int y);
 	int** return_tab();
 	vector<cv::Point> return_queue();
-	vector<cv::Point> return_history();
+	vector<cv::Point3i> return_history();
 	int return_size();
 	
 
 private:
 	int **tab;
 	vector<cv::Point> queue;
-	vector <cv::Point> history;
+	vector <cv::Point3i> history;
 	int size;
 	int counter;
 };

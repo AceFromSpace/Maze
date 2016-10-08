@@ -51,7 +51,7 @@ void maze_back::show_queue()
 
 int maze_back::make_maze(int x, int y)
 {
-	history.push_back(cv::Point(x, y));
+	history.push_back(cv::Point3i(x, y,0));
 
 	int p = rand() % 4;
 
@@ -93,6 +93,7 @@ int maze_back::make_maze(int x, int y)
 	}
 
 	tab[x][y] = counter++;
+	history.push_back(cv::Point3i(x, y, 1));
 	queue.push_back(cv::Point(x, y));
 	if (x == 0 && y == 0)
 	{
@@ -111,7 +112,7 @@ vector<cv::Point> maze_back::return_queue()
 	return queue;
 }
 
-vector<cv::Point> maze_back::return_history()
+vector<cv::Point3i> maze_back::return_history()
 {
 	return history;
 }

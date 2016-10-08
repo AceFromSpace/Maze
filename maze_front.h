@@ -9,7 +9,7 @@ using namespace std;
 class maze_front
 {
 public:
-	maze_front(int **tabbb, vector<cv::Point> que, int sizeee, vector<cv::Point> his,  int marg);
+	maze_front(int **tabbb, vector<cv::Point> que, int sizeee, vector<cv::Point3i> his,  int marg,bool mod);
 	~maze_front();
 	void make_maze();
 	void make_board();
@@ -25,13 +25,14 @@ public:
 	int return_cell_size();
 
 private:
+	bool mode;
 	int size;
 	int **tab;
 	int margin;
 	int cell_size;
 	Mat board;
 	vector<Point> queue;
-	vector<Point> history;
+	vector<Point3i> history;
 	int GetDesktopResolution();
 	
 	

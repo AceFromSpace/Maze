@@ -2,7 +2,7 @@
 
 
 
-maze_front::maze_front(int **tabbb, vector<cv::Point> que,  int sizeee, vector<cv::Point> his, int marg):tab(tabbb), queue(que),history(his), size(sizeee),margin(marg)
+maze_front::maze_front(int **tabbb, vector<cv::Point> que,  int sizeee, vector<cv::Point3i> his, int marg, bool mod=false):tab(tabbb), queue(que),history(his), size(sizeee),margin(marg),mode(mod)
 {
 	cell_size = (GetDesktopResolution() - 2 * margin-50) / sizeee;
 
@@ -19,7 +19,8 @@ void maze_front::make_maze()
 	
 	make_board();
 	make_walls();
-	//make_walls_step_by_step();
+	if (mode) 	make_walls_step_by_step2();
+	else  make_walls();
 	imshow("image", board);
 
 }
@@ -76,7 +77,7 @@ void maze_front::make_walls()
 	while (i <= size*size)
 	{
 		start = find_position(i);
-		rectangle(board, start, Point(start.x + cell_size, start.y + cell_size), 0);
+		rectangle(board, start, Point(start.x + cell_size, start.y + cell_size), 0,2);
 		i++;
 	}
 	int j = size*size;
@@ -160,19 +161,18 @@ void maze_front::make_walls_step_by_step2()
 {
 	Mat temp_board = Mat::zeros(board.size(), CV_8UC3);
 	board.copyTo(temp_board);
-	int j=0;
-	int k = 0;
+	int j = 0;
 	namedWindow("Step_by_step");
 
 	while (j < history.size())
-	{
-		if (history[j] == queue[k])
+	{ 
+		if (history[j].z == 0)
 		{
-			rectangle(temp_board, Point(queue[j].y * cell_size + 1, (queue[j].x*cell_size) + 1), Point((queue[j].y + 1) *cell_size - 1, (queue[j].x + 1)* cell_size - 1), Scalar(200, 214, 48), -1);
-			k++;
+			rectangle(temp_board, Point(history[j].y * cell_size + 2, (history[j].x*cell_size) + 2), Point((history[j].y + 1) *cell_size - 2, (history[j].x + 1)* cell_size - 2), Scalar(200, 214, 48), -1);
+			history[j].z++;
 		}
 		else
-			rectangle(temp_board, Point(queue[j].y * cell_size + 1, (queue[j].x*cell_size) + 1), Point((queue[j].y + 1) *cell_size - 1, (queue[j].x + 1)* cell_size - 1), Scalar(138, 43, 226), -1);
+			rectangle(temp_board, Point(history[j].y * cell_size + 2, (history[j].x*cell_size) + 2), Point((history[j].y + 1) *cell_size - 2, (history[j].x + 1)* cell_size - 2), Scalar(138, 43, 226), -1);
 		imshow("Step_by_step", temp_board);
 		waitKey(200);
 		j++;
@@ -181,27 +181,28 @@ void maze_front::make_walls_step_by_step2()
 
 void maze_front::destroy_wall(Mat img ,int j,Point present,Scalar color)
 {
+	int thickness = 2;
 	int wall_to_destroy = j;
 	switch (wall_to_destroy)
 	{
 	case 0://left
 	{
-		line(img, present, Point(present.x, present.y + cell_size), color);
+		line(img, Point(present.x,present.y+ thickness), Point(present.x, present.y + cell_size- thickness), color, thickness);
 
 	}break;
 	case 1://right
 	{
-		line(img, Point(present.x + cell_size, present.y), Point(present.x + cell_size, present.y + cell_size), color);
+		line(img, Point(present.x + cell_size, present.y+ thickness), Point(present.x + cell_size, present.y + cell_size- thickness), color, thickness);
 
 	}break;
 	case 2://top
 	{
-		line(img, present, Point(present.x + cell_size, present.y), color);
+		line(img,Point(present.x+ thickness,present.y), Point(present.x + cell_size- thickness, present.y), color, thickness);
 
 	}break;
 	case 3://bottom
 	{
-		line(img, Point(present.x + cell_size, present.y + cell_size), Point(present.x, present.y + cell_size), color);
+		line(img, Point(present.x- thickness + cell_size, present.y + cell_size), Point(present.x+ thickness, present.y + cell_size), color, thickness);
 
 	}break;
 
